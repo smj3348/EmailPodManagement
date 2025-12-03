@@ -1,0 +1,115 @@
+/* Global layout */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #cfdcff; /* light blue background */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 Roboto, sans-serif; /* slicker modern font */
+    color: #0b1020;
+}
+
+/* Centered login container */
+.login-page {
+    width: 100%;
+    max-width: 520px;
+    padding: 1.5rem;
+}
+
+.login-card {
+    background: #2643a8;               /* darker blue foreground */
+    border-radius: 24px;
+    padding: 2.5rem 2.75rem;
+    box-shadow: 0 24px 60px rgba(10, 24, 84, 0.55);
+    color: #f5f7ff;
+}
+
+/* Title / text */
+.login-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+}
+
+.login-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-bottom: 1.5rem;
+}
+
+/* Form fields */
+.login-form {
+    margin-top: 0.5rem;
+}
+
+.login-field {
+    margin-bottom: 1.1rem;
+}
+
+.login-label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    opacity: 0.9;
+}
+
+.login-input {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    background: rgba(11, 19, 60, 0.35);
+    color: #f5f7ff;
+}
+
+.login-input:focus {
+    box-shadow: 0 0 0 2px rgba(162, 190, 255, 0.9);
+}
+
+/* Error text */
+.login-error {
+    background: rgba(255, 102, 133, 0.12);
+    border-radius: 10px;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+/* Button */
+.login-button {
+    width: 100%;
+    padding: 0.65rem;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: #f5f7ff;
+    color: #1b2c7c;
+    box-shadow: 0 10px 25px rgba(5, 10, 40, 0.5);
+}
+
+.login-button:hover {
+    filter: brightness(1.03);
+}
+
+/* Footer link */
+.login-footer {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+    opacity: 0.85;
+}
+
+.login-footer a {
+    color: #d8e2ff;
+    text-decoration: underline;
+}
