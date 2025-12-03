@@ -67,13 +67,14 @@ if db_url:
         )
     }
 else:
-    # Default to SQLite for local / first-time deploy
+    # Default to SQLite, but on a persistent disk in Render
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": str(BASE_DIR / "db.sqlite3"),
+            "NAME": "/var/data/db.sqlite3",   # <- use disk here
         }
     }
+
 
 # === Static Files ===
 STATIC_URL = "/static/"
