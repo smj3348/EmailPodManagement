@@ -1,8 +1,9 @@
 from django.contrib import admin
-from django.urls import path
-from dashboard.views import home
+from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", home, name="home"),
+    path("accounts/", include("django.contrib.auth.urls")),  # login/logout
+    path("", include("dashboard.urls")),                     # dashboard at "/"
 ]
+
