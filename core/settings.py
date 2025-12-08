@@ -38,7 +38,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],  
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -50,7 +50,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 WSGI_APPLICATION = "core.wsgi.application"
 
@@ -71,10 +70,14 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "/var/data/db.sqlite3",   # <- use disk here
+            "NAME": "/var/data/db.sqlite3",  # <- persistent DB file
         }
     }
 
+# === Authentication Redirects ===
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "dashboard"   # <--- FIX FOR /accounts/profile/
+LOGOUT_REDIRECT_URL = "login"
 
 # === Static Files ===
 STATIC_URL = "/static/"
@@ -85,6 +88,7 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     }
 }
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
