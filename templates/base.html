@@ -11,6 +11,17 @@
         <div class="app-header-inner">
             <div class="app-logo">Outbound Operations</div>
             <nav class="app-nav">
+    <a href="/">Dashboard</a>
+    <a href="/monitoring/">Monitoring</a>
+    <a href="/provisioning/">Provisioning</a>
+    <a href="/jobs/">Jobs</a>
+    <a href="/docs/">Docs</a>
+    <a href="/settings/">Settings</a>
+
+    <span class="app-user">Logged in as {{ request.user.username }}</span>
+    <a href="/admin/">Admin</a>
+    <a href="/accounts/logout/">Logout</a>
+</nav>
                 <span class="app-user">Logged in as {{ request.user.username }}</span>
                 <a href="/admin/">Admin</a>
                 <a href="/accounts/logout/">Logout</a>
