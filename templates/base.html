@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Outbound Operations{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body class="app-body">
+    <header class="app-header">
+        <div class="app-header-inner">
+            <div class="app-logo">Outbound Operations</div>
+            <nav class="app-nav">
+                <span class="app-user">Logged in as {{ request.user.username }}</span>
+                <a href="/admin/">Admin</a>
+                <a href="/accounts/logout/">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="app-main-inner">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</body>
+</html>
