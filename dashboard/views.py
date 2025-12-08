@@ -1,15 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-
-@login_required
-def dashboard_home(request):
-    # Placeholder for now – later we'll show servers, jobs, etc.
-    return render(request, "dashboard.html", {})
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
 @login_required
 def dashboard_home(request):
     return render(request, "dashboard.html", {})
@@ -17,6 +8,10 @@ def dashboard_home(request):
 @login_required
 def monitoring_page(request):
     return render(request, "monitoring.html", {})
+
+@login_required
+def pods_page(request):
+    return render(request, "pods.html", {})
 
 @login_required
 def provisioning_page(request):
