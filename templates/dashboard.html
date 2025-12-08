@@ -1,22 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Outbound Operations Dashboard</title>
-</head>
-<body>
-    <h1>Outbound Operations Dashboard</h1>
+{% extends "base.html" %}
 
-    <p>Welcome, {{ request.user.username }}.</p>
+{% block title %}Dashboard | Outbound Operations{% endblock %}
 
-    <p>
-        This is a placeholder dashboard.  
-        Monitoring + Provisioning controls will appear here next.
-    </p>
+{% block content %}
+<div class="dash-grid">
+    <section class="dash-card">
+        <h2>Monitoring Overview</h2>
+        <p>This will show the status of your VPS, mail servers, and Hestia nodes.</p>
+        <p>Next steps: we’ll add a <strong>Server</strong> model and show real data here.</p>
+    </section>
 
-    <p>
-        <a href="/admin/">Go to Django Admin</a> |
-        <a href="/accounts/logout/">Logout</a>
-    </p>
-</body>
-</html>
+    <section class="dash-card">
+        <h2>Provisioning Actions</h2>
+        <p>Here you’ll be able to trigger your Python scripts:</p>
+        <ul>
+            <li>Create new VPS / Hestia pods</li>
+            <li>Set up DNS templates</li>
+            <li>Wire MailWizz delivery servers</li>
+        </ul>
+        <p>For now, this is a placeholder.</p>
+    </section>
+</div>
+{% endblock %}
