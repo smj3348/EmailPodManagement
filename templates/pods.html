@@ -3,12 +3,24 @@
 
 {% block content %}
 <h2>Pods</h2>
-<p>
-    This page will track all email pods and their details: linked VPS, Hestia nodes,
-    MailWizz instances, and overall pod health.
-</p>
-<p>
-    Later we’ll add a <strong>Pod</strong> model and show each pod with its servers,
-    domains, and status.
-</p>
+
+<div class="dash-grid">
+    <section class="dash-card">
+        <h3>VPS Servers</h3>
+        <p>All individual VPS nodes (IONOS and others) with IPs, hostnames, and access details.</p>
+        <p><a href="{% url 'pods_vps_list' %}">View VPS servers →</a></p>
+    </section>
+
+    <section class="dash-card">
+        <h3>Main Engine Servers</h3>
+        <p>Core mail engines and control servers that power each pod.</p>
+        <p><em>(Coming soon)</em></p>
+    </section>
+
+    <section class="dash-card">
+        <h3>Pods</h3>
+        <p>Logical pods linking main engines, VPS nodes, domains, and MailWizz stacks.</p>
+        <p><em>(Coming soon)</em></p>
+    </section>
+</div>
 {% endblock %}
