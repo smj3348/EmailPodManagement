@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}VPS Servers | Pods | Outbound Operations{% endblock %}
+
+{% block content %}
+<h2>VPS Servers</h2>
+
+<form method="get" class="filter-bar" style="margin-bottom: 1rem;">
+    <input type="text"
+           name="q"
+           placeholder="Search by code, name, IP, hostname, domain..."
+           value="{{ q }}"
+           style="padding: 0.4rem 0.6rem; min-width: 260px;">
+
+    <select name="provider" style="padding: 0.4rem 0.6rem; margin-left: 0.5rem;">
+        <option value="">All providers</option>
+        <option value="IONOS" {% if provider == "IONOS" %}selected{% endif %}>IONOS</option>
+        <option value="OTHER" {% if provider == "OTHER" %}selected{% endif %}>Other</option>
+    </select>
+
+    <select name="active" style="padding: 0.4rem 0.6rem; margin-left: 0.5rem;">
+        <option value="">All</option>
+        <option value="true" {% if active == "true" %}selected{% endif %}>Active</option>
+        <option value="false" {% if active == "false" %}selected{% endif %}>Inactive</option>
+    </select>
+
+    <button type="submit" style="padding: 0.4rem 0.9rem; margin-left: 0.5rem;">
+        Filter
+    </button>
+</form>
+
+{% if servers %}
+    <div class="dash-grid">
+        {% for s in servers %}
+            <section class="dash-card">
+                <h3>{{ s.code }} — {{ s.friendly_name }}</h3>
+                <p>
+                    <strong>Provider:</strong> {{ s.provider }}{% if s.package %} ({{ s.package }}){% endif %}<br>
+                    {% if s.main_ip %}<strong>IP:</strong> {{ s.main_ip }}<br>{% endif %}
+                    {% if s.hostname %}<strong>Hostname:</strong> {{ s.hostname }}<br>{% endif %}
+                    {% if s.domain %}<strong>Domain:</strong> {{ s.domain }}<br>{% endif %}
+                </p>
+                <p>
+                    {% if s.panel_url %}
+                        <a href="{{ s.panel_url }}" target="_blank" rel="noopener noreferrer">Panel</a>
+                    {% endif %}
+                    {% if s.webmail_url %}
+                        · <a href="{{ s.webmail_url }}" target="_blank" rel="noopener noreferrer">Webmail</a>
+                    {% endif %}
+                </p>
+                <p>
+                    <a href="{% url 'pods_vps_detail' slug=s.slug %}">View details →</a>
+                </p>
+            </section>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No VPS servers found. Once we load data from your spreadsheet, they will appear here.</p>
+{% endif %}
+{% endblock %}
