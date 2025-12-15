@@ -1,1 +1,17 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
 
+{% block content %}
+  <h1>{{ title }}</h1>
+
+  <form method="post" enctype="multipart/form-data" style="margin-top: 1rem;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="default">Upload & Import</button>
+    <a href=".." class="button" style="margin-left: 0.5rem;">Cancel</a>
+  </form>
+
+  <p style="margin-top: 1rem;">
+    CSV must include at least: <code>code</code>. Other columns map to your VPS fields.
+  </p>
+{% endblock %}
