@@ -1,0 +1,17 @@
+code,friendly_name,provider,package,main_ip,hostname,domain,panel_url,webmail_url,panel_username,panel_password,ssh_host,ssh_user,is_active,Type
+DS1-VPS-XS,cesserver1,IONOS,VPS-XS,74.208.171.116,mail.cesserver1.com,cesserver1.com,https://74.208.171.116:8083,https://mail.cesserver1.com:8083,admin33,afrkq4398tq355!!!,ssh root@74.208.171.116,root,true,ds1-vps-xs
+DS2-VPS-S,cesserver2,IONOS,VPS-S,74.208.171.117,mail.cesserver2.com,cesserver2.com,https://74.208.171.117:8083,https://mail.cesserver2.com:8083,admin33,afrkq4398tq355!!!,74.208.171.117,root,true,ds2-vps-s
+DS3-VPS-M,cesserver3,IONOS,VPS-M,74.208.171.118,mail.cesserver3.com,cesserver3.com,https://74.208.171.118:8083  ,https://mail.cesserver3.com:8083,admin33,afrkq4398tq355!!!,"Biggest: Cpu:2 vCore
+RAM:4 GB
+Disk:120 GB NVMe SSD",root,true,ds3-vps-m
+S37 Dedicated Server,NONE YET,IONOS,,74.208.175.194,,NONE YET,https://74.208.175.194:8443,PLESK,admin,s37ksq58tEHSHho586@5!!!!,"4 Core x 3.5 GHz (Intel Xeon E3-1230 v6)
+RAM:32 GB
+SSD:2 x 480 GB Software RAID 1""",root,true,s37-dedicated-server
+DS4-VPS-S,cesserver4,IONOS,VPS-S,74.208.218.92,,cesserver4.com,https://74.208.218.92:8083,https://mail.cesserver4.com:8083,admin33,afrkq4398tq355!!!,ssh 74.208.218.92,root,true,ds4-vps-s
+DS5-VPS-XS,cesserver5,IONOS,VPS-XS,74.208.218.97,,cesserver5.com,https://74.208.218.97:8083,https://mail.cesserver5.com:8083,admin33,afrkq4398tq355!!!,ssh 74.208.218.97,root,true,ds5-vps-xs
+DS6-VPS-XS,cesserver6,IONOS,VPS-XS,74.208.218.98,,cesserver6.com,https://74.208.218.98:8083,https://mail.cesserver6.com:8083,admin33,afrkq4398tq355!!!,SSH root@74.208.218.98,root,true,ds6-vps-xs
+DS7-VPS-S,cesserver7,IONOS,VPS-S,74.208.218.99,,cesserver7.com,https://74.208.218.99:8083,https://mail.cesserver7.com:8083,admin33,afrkq4398tq355!!!,SSH 74.208.218.99,root,true,ds7-vps-s
+DS8-VPS-S,cesserver8,IONOS,VPS-S,74.208.218.101,,cesserver8.com,,https://mail.cesserver8.com:8083,admin33,afrkq4398tq355!!!,ssh root@74.208.218.101,root,true,ds8-vps-s
+DS9-VPS-xs,cesserver9,IONOS,VPS-xs,74.208.218.104,,cesserver9.com,https://74.208.218.104:8083,https://mail.cesserver9.com:8083,admin33,afrkq4398tq355!!!,ssh root@74.208.218.104,root,true,ds9-vps-xs
+DS10-VPS-S,cesserver10,IONOS,VPS-S,74.208.227.25,mail.cesserver10.com,cesserver10.com,https:///74.208.227.25:8083,https://mail.cesserver10.com:8083,admin33,afrkq4398tq355!!!,,root,true,ds10-vps-s
+DS11-VPS-S,cesserver11,IONOS,VPS-S,74.208.227.27,mail.cesserver11.com,cesserver11.com,https://74.208.227.27:8083,https://mail.cesserver11.com:8083,admin33,afrkq4398tq355!!!,,root,true,ds11-vps-s
