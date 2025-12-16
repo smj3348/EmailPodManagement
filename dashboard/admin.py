@@ -17,6 +17,9 @@ class VpsServerAdmin(admin.ModelAdmin):
     search_fields = ("code", "friendly_name", "main_ip", "hostname", "domain")
     prepopulated_fields = {"slug": ("code",)}
 
+    # NOTE: This expects templates at:
+    # templates/admin/dashboard/vpsserver/change_list.html
+    # templates/admin/dashboard/vpsserver/import_csv.html
     change_list_template = "admin/dashboard/vpsserver/change_list.html"
 
     def get_urls(self):
@@ -31,31 +34,46 @@ class VpsServerAdmin(admin.ModelAdmin):
         return custom_urls + urls
 
     def import_csv(self, request):
+        """
+        Admin page that imports VPS servers from a CSV file.
+
+        Requirements:
+        - CSV should include a column named: code
+          (we also tolerate Code/CODE and BOM-prefixed headers)
+        """
         if request.method == "POST":
             form = VpsCsvImportForm(request.POST, request.FILES)
             if form.is_valid():
-                f = form.cleaned_data["csv_file"]
-                data = f.read().decode("utf-8", errors="replace")
+                uploaded = form.cleaned_data["csv_file"]
+
+                # Read bytes and decode safely (handles UTF-8 w/ weird chars)
+                data = uploaded.read().decode("utf-8", errors="replace")
                 reader = csv.DictReader(io.StringIO(data))
 
                 created = 0
                 updated = 0
+                skipped = 0
+                warned_headers = False
 
-    for row in reader:
-        code = ""
-        for k in ("code", "Code", "CODE", "\ufeffcode", "\ufeffCode"):
-            if k in row and row[k]:
-                code = str(row[k]).strip()
-                break
+                for row in reader:
+                    # tolerate common header variations: code, Code, BOM, etc.
+                    code = ""
+                    for k in ("code", "Code", "CODE", "\ufeffcode", "\ufeffCode", "\ufeffCODE"):
+                        if k in row and row[k]:
+                            code = str(row[k]).strip()
+                            break
 
-        if not code:
-            self.message_user(
-                request,
-                f"Skipped a row because 'code' was empty or header didn't match. Headers seen: {list(row.keys())[:10]}",
-                level=messages.WARNING,
-            )
-            continue
-
+                    if not code:
+                        skipped += 1
+                        if not warned_headers:
+                            self.message_user(
+                                request,
+                                f"Some rows were skipped because 'code' was empty or the header didn't match. "
+                                f"Headers seen: {list(row.keys())[:12]}",
+                                level=messages.WARNING,
+                            )
+                            warned_headers = True
+                        continue
 
                     defaults = {
                         "friendly_name": (row.get("friendly_name") or "").strip(),
@@ -91,10 +109,11 @@ class VpsServerAdmin(admin.ModelAdmin):
 
                 self.message_user(
                     request,
-                    f"Import complete: {created} created, {updated} updated.",
+                    f"Import complete: {created} created, {updated} updated, {skipped} skipped.",
                     level=messages.SUCCESS,
                 )
                 return redirect("..")
+
         else:
             form = VpsCsvImportForm()
 
