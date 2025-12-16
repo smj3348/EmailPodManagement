@@ -253,3 +253,23 @@ a:visited {
     color: #6a8fe0;
 }
 
+/* ===== VPS LIST TABLE ===== */
+
+.dash-card table th,
+.dash-card table td {
+    font-size: 0.9rem;
+}
+
+.dash-card table tr:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* ===== VIEW TOGGLE LINKS ===== */
+
+a {
+    color: #c1c7ff;
+}
+
+a:hover {
+    color: #ffffff;
+}
