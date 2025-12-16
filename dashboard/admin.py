@@ -42,9 +42,19 @@ class VpsServerAdmin(admin.ModelAdmin):
                 updated = 0
 
                 for row in reader:
-                    code = (row.get("code") or "").strip()
+                    code = ""
+                    for k in ("code", "Code", "CODE", "\ufeffcode", "\ufeffCode"):
+                        if k in row and row[k]:
+                        code = str(row[k]).strip()
+                        break
                     if not code:
-                        continue
+                        # show a helpful error once, then continue
+                        self.message_user(
+                          request,
+                          f"Skipped a row because 'code' was empty or header didn't match. Headers seen: {list(row.keys())[:10]}",
+                          level=messages.WARNING,
+                       )
+                       continue
 
                     defaults = {
                         "friendly_name": (row.get("friendly_name") or "").strip(),
