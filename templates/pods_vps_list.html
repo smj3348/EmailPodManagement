@@ -4,56 +4,117 @@
 {% block content %}
 <h2>VPS Servers</h2>
 
-<form method="get" class="filter-bar" style="margin-bottom: 1rem;">
+<!-- View toggle -->
+<div style="margin-bottom: 0.75rem;">
+  <a href="?q={{ q }}&provider={{ provider }}&active={{ active }}&view=tiles"
+     style="margin-right:0.75rem; {% if view_mode == 'tiles' %}font-weight:700;{% endif %}">
+     Tiles
+  </a>
+  <a href="?q={{ q }}&provider={{ provider }}&active={{ active }}&view=list"
+     style="{% if view_mode == 'list' %}font-weight:700;{% endif %}">
+     List
+  </a>
+</div>
+
+<!-- Filters -->
+<form method="get" style="margin-bottom: 1rem;">
+    <input type="hidden" name="view" value="{{ view_mode }}">
+
     <input type="text"
            name="q"
-           placeholder="Search by code, name, IP, hostname, domain..."
+           placeholder="Search code, name, IP, hostname, domain..."
            value="{{ q }}"
-           style="padding: 0.4rem 0.6rem; min-width: 260px;">
+           style="padding:0.45rem 0.6rem; min-width:260px;">
 
-    <select name="provider" style="padding: 0.4rem 0.6rem; margin-left: 0.5rem;">
+    <select name="provider" style="padding:0.45rem 0.6rem; margin-left:0.5rem;">
         <option value="">All providers</option>
         <option value="IONOS" {% if provider == "IONOS" %}selected{% endif %}>IONOS</option>
         <option value="OTHER" {% if provider == "OTHER" %}selected{% endif %}>Other</option>
     </select>
 
-    <select name="active" style="padding: 0.4rem 0.6rem; margin-left: 0.5rem;">
+    <select name="active" style="padding:0.45rem 0.6rem; margin-left:0.5rem;">
         <option value="">All</option>
         <option value="true" {% if active == "true" %}selected{% endif %}>Active</option>
         <option value="false" {% if active == "false" %}selected{% endif %}>Inactive</option>
     </select>
 
-    <button type="submit" style="padding: 0.4rem 0.9rem; margin-left: 0.5rem;">
+    <button type="submit" style="padding:0.45rem 1rem; margin-left:0.5rem;">
         Filter
     </button>
 </form>
 
 {% if servers %}
-    <div class="dash-grid">
-        {% for s in servers %}
-            <section class="dash-card">
-                <h3>{{ s.code }} — {{ s.friendly_name }}</h3>
-                <p>
-                    <strong>Provider:</strong> {{ s.provider }}{% if s.package %} ({{ s.package }}){% endif %}<br>
-                    {% if s.main_ip %}<strong>IP:</strong> {{ s.main_ip }}<br>{% endif %}
-                    {% if s.hostname %}<strong>Hostname:</strong> {{ s.hostname }}<br>{% endif %}
-                    {% if s.domain %}<strong>Domain:</strong> {{ s.domain }}<br>{% endif %}
-                </p>
-                <p>
-                    {% if s.panel_url %}
-                        <a href="{{ s.panel_url }}" target="_blank" rel="noopener noreferrer">Panel</a>
-                    {% endif %}
-                    {% if s.webmail_url %}
-                        · <a href="{{ s.webmail_url }}" target="_blank" rel="noopener noreferrer">Webmail</a>
-                    {% endif %}
-                </p>
-                <p>
-                    <a href="{% url 'pods_vps_detail' slug=s.slug %}">View details →</a>
-                </p>
-            </section>
-        {% endfor %}
+
+  {% if view_mode == "list" %}
+
+    <!-- LIST VIEW -->
+    <div class="dash-card">
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr style="border-bottom:1px solid #202742; text-align:left;">
+            <th style="padding:0.5rem;">Code</th>
+            <th style="padding:0.5rem;">Name</th>
+            <th style="padding:0.5rem;">IP</th>
+            <th style="padding:0.5rem;">Domain</th>
+            <th style="padding:0.5rem;">Panel</th>
+            <th style="padding:0.5rem;">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in servers %}
+            <tr style="border-bottom:1px solid #202742;">
+              <td style="padding:0.5rem;">{{ s.code }}</td>
+              <td style="padding:0.5rem;">{{ s.friendly_name }}</td>
+              <td style="padding:0.5rem;">{% if s.main_ip %}{{ s.main_ip }}{% endif %}</td>
+              <td style="padding:0.5rem;">{% if s.domain %}{{ s.domain }}{% endif %}</td>
+              <td style="padding:0.5rem;">
+                {% if s.panel_url %}
+                  <a href="{{ s.panel_url }}" target="_blank" rel="noopener noreferrer">Panel</a>
+                {% endif %}
+              </td>
+              <td style="padding:0.5rem;">
+                <a href="{% url 'pods_vps_detail' slug=s.slug %}">View</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+
+  {% else %}
+
+    <!-- TILE VIEW -->
+    <div class="dash-grid">
+      {% for s in servers %}
+        <section class="dash-card">
+          <h3>{{ s.code }} — {{ s.friendly_name }}</h3>
+
+          <p>
+            <strong>Provider:</strong> {{ s.provider }}{% if s.package %} ({{ s.package }}){% endif %}<br>
+            {% if s.main_ip %}<strong>IP:</strong> {{ s.main_ip }}<br>{% endif %}
+            {% if s.hostname %}<strong>Hostname:</strong> {{ s.hostname }}<br>{% endif %}
+            {% if s.domain %}<strong>Domain:</strong> {{ s.domain }}<br>{% endif %}
+          </p>
+
+          <p>
+            {% if s.panel_url %}
+              <a href="{{ s.panel_url }}" target="_blank" rel="noopener noreferrer">Panel</a>
+            {% endif %}
+            {% if s.webmail_url %}
+              · <a href="{{ s.webmail_url }}" target="_blank" rel="noopener noreferrer">Webmail</a>
+            {% endif %}
+          </p>
+
+          <p>
+            <a href="{% url 'pods_vps_detail' slug=s.slug %}">View details →</a>
+          </p>
+        </section>
+      {% endfor %}
+    </div>
+
+  {% endif %}
+
 {% else %}
-    <p>No VPS servers found. Once we load data from your spreadsheet, they will appear here.</p>
+  <p>No VPS servers found.</p>
 {% endif %}
 {% endblock %}
