@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.db import models
 
-from .models import VpsServer, Pod
+from .models import VpsServer
 
 
 # ------------------- Dashboard -------------------
@@ -19,22 +19,36 @@ def monitoring_page(request):
     return render(request, "monitoring.html", {})
 
 
-# ------------------- Devices -------------------
+# ------------------- Pods Overview -------------------
 
 @login_required
-def devices_page(request):
-    return render(request, "devices.html", {})
+def pods_page(request):
+    """
+    Pods overview: links to VPS servers, Main Engine servers, and full pods.
+    """
+    return render(request, "pods.html", {})
 
+
+# ------------------- VPS List Page -------------------
 
 @login_required
-def devices_vps_list(request):
-    qs = VpsServer.objects.select_related("pod").all()
+def vps_list(request):
+    """
+    Displays all VPS servers with search + filtering and a layout toggle (tiles/list).
+    """
+    qs = VpsServer.objects.all()
 
+    # Filters
     q = request.GET.get("q", "").strip()
     provider = request.GET.get("provider", "").strip()
     active = request.GET.get("active", "").strip()
-    pod = request.GET.get("pod", "").strip()
 
+    # Layout toggle: tiles or list
+    view_mode = request.GET.get("view", "tiles").strip().lower()
+    if view_mode not in ("tiles", "list"):
+        view_mode = "tiles"
+
+    # Search
     if q:
         qs = qs.filter(
             models.Q(code__icontains=q)
@@ -44,78 +58,32 @@ def devices_vps_list(request):
             | models.Q(domain__icontains=q)
         )
 
+    # Provider filter
     if provider:
-        qs = qs.filter(provider=provider)
+        qs = qs.filter(provider__iexact=provider)
 
+    # Active filter
     if active == "true":
         qs = qs.filter(is_active=True)
     elif active == "false":
         qs = qs.filter(is_active=False)
 
-    if pod:
-        qs = qs.filter(pod__slug=pod)
+    context = {
+        "servers": qs,
+        "q": q,
+        "provider": provider,
+        "active": active,
+        "view_mode": view_mode,
+    }
+    return render(request, "pods_vps_list.html", context)
 
-    pods = Pod.objects.all()
-    provider_choices = VpsServer.PROVIDER_CHOICES
 
-    return render(
-        request,
-        "devices_vps_list.html",
-        {
-            "servers": qs,
-            "q": q,
-            "provider": provider,
-            "active": active,
-            "pod": pod,
-            "pods": pods,
-            "provider_choices": provider_choices,
-        },
-    )
-
+# ------------------- VPS Detail Page -------------------
 
 @login_required
-def devices_vps_detail(request, slug):
-    server = get_object_or_404(VpsServer.objects.select_related("pod"), slug=slug)
-    return render(request, "devices_vps_detail.html", {"server": server})
-
-
-# ------------------- Pods -------------------
-
-@login_required
-def pods_page(request):
-    qs = Pod.objects.all()
-
-    q = request.GET.get("q", "").strip()
-    provider = request.GET.get("provider", "").strip()
-
-    if q:
-        qs = qs.filter(
-            models.Q(name__icontains=q)
-            | models.Q(purpose__icontains=q)
-            | models.Q(notes__icontains=q)
-        )
-
-    if provider:
-        qs = qs.filter(provider__icontains=provider)
-
-    qs = qs.annotate(device_count=models.Count("devices"))
-
-    return render(
-        request,
-        "pods.html",
-        {
-            "pods": qs,
-            "q": q,
-            "provider": provider,
-        },
-    )
-
-
-@login_required
-def pod_detail(request, slug):
-    pod = get_object_or_404(Pod, slug=slug)
-    devices = pod.devices.order_by("code")
-    return render(request, "pods_detail.html", {"pod": pod, "devices": devices})
+def vps_detail(request, slug):
+    server = get_object_or_404(VpsServer, slug=slug)
+    return render(request, "pods_vps_detail.html", {"server": server})
 
 
 # ------------------- Provisioning -------------------
