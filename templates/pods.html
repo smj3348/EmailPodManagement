@@ -4,23 +4,41 @@
 {% block content %}
 <h2>Pods</h2>
 
-<div class="dash-grid">
-    <section class="dash-card">
-        <h3>VPS Servers</h3>
-        <p>All individual VPS nodes (IONOS and others) with IPs, hostnames, and access details.</p>
-        <p><a href="{% url 'pods_vps_list' %}">View VPS servers →</a></p>
-    </section>
+<form method="get" class="filter-bar" style="margin-bottom: 1rem;">
+    <input type="text"
+           name="q"
+           placeholder="Search pods by name/purpose/notes..."
+           value="{{ q }}"
+           style="padding: 0.4rem 0.6rem; min-width: 260px;">
 
-    <section class="dash-card">
-        <h3>Main Engine Servers</h3>
-        <p>Core mail engines and control servers that power each pod.</p>
-        <p><em>(Coming soon)</em></p>
-    </section>
+    <input type="text"
+           name="provider"
+           placeholder="Provider filter (optional)"
+           value="{{ provider }}"
+           style="padding: 0.4rem 0.6rem; margin-left: 0.5rem;">
 
-    <section class="dash-card">
-        <h3>Pods</h3>
-        <p>Logical pods linking main engines, VPS nodes, domains, and MailWizz stacks.</p>
-        <p><em>(Coming soon)</em></p>
-    </section>
-</div>
+    <button type="submit" style="padding: 0.4rem 0.9rem; margin-left: 0.5rem;">
+        Filter
+    </button>
+</form>
+
+{% if pods %}
+    <div class="dash-grid">
+        {% for p in pods %}
+            <section class="dash-card">
+                <h3>{{ p.name }}</h3>
+                <p>
+                    {% if p.provider %}<strong>Provider:</strong> {{ p.provider }}<br>{% endif %}
+                    {% if p.purpose %}<strong>Purpose:</strong> {{ p.purpose }}<br>{% endif %}
+                    <strong>Devices:</strong> {{ p.device_count }}
+                </p>
+                <p>
+                    <a href="{% url 'pod_detail' slug=p.slug %}">View pod →</a>
+                </p>
+            </section>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No pods yet. Create one in Admin → Pods, then assign devices to it.</p>
+{% endif %}
 {% endblock %}
