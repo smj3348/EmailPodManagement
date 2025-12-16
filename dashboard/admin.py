@@ -6,15 +6,22 @@ from django.shortcuts import render, redirect
 from django.urls import path
 from django.utils.text import slugify
 
-from .models import VpsServer
+from .models import VpsServer, Pod
 from .forms import VpsCsvImportForm
+
+
+@admin.register(Pod)
+class PodAdmin(admin.ModelAdmin):
+    list_display = ("name", "provider", "purpose", "updated_at")
+    search_fields = ("name", "provider", "purpose")
+    prepopulated_fields = {"slug": ("name",)}
 
 
 @admin.register(VpsServer)
 class VpsServerAdmin(admin.ModelAdmin):
-    list_display = ("code", "friendly_name", "provider", "package", "main_ip", "is_active")
-    list_filter = ("provider", "is_active", "package")
-    search_fields = ("code", "friendly_name", "main_ip", "hostname", "domain")
+    list_display = ("code", "friendly_name", "pod", "provider", "package", "main_ip", "is_active")
+    list_filter = ("provider", "is_active", "package", "pod")
+    search_fields = ("code", "friendly_name", "main_ip", "hostname", "domain", "pod__name")
     prepopulated_fields = {"slug": ("code",)}
 
     # NOTE: This expects templates at:
@@ -40,13 +47,15 @@ class VpsServerAdmin(admin.ModelAdmin):
         Requirements:
         - CSV should include a column named: code
           (we also tolerate Code/CODE and BOM-prefixed headers)
+
+        Optional:
+        - CSV column: pod  (Pod name; will auto-create Pod if missing)
         """
         if request.method == "POST":
             form = VpsCsvImportForm(request.POST, request.FILES)
             if form.is_valid():
                 uploaded = form.cleaned_data["csv_file"]
 
-                # Read bytes and decode safely (handles UTF-8 w/ weird chars)
                 data = uploaded.read().decode("utf-8", errors="replace")
                 reader = csv.DictReader(io.StringIO(data))
 
@@ -56,7 +65,6 @@ class VpsServerAdmin(admin.ModelAdmin):
                 warned_headers = False
 
                 for row in reader:
-                    # tolerate common header variations: code, Code, BOM, etc.
                     code = ""
                     for k in ("code", "Code", "CODE", "\ufeffcode", "\ufeffCode", "\ufeffCODE"):
                         if k in row and row[k]:
@@ -75,7 +83,14 @@ class VpsServerAdmin(admin.ModelAdmin):
                             warned_headers = True
                         continue
 
+                    # Optional pod support
+                    pod_name = (row.get("pod") or row.get("Pod") or "").strip()
+                    pod_obj = None
+                    if pod_name:
+                        pod_obj, _ = Pod.objects.get_or_create(name=pod_name)
+
                     defaults = {
+                        "pod": pod_obj,
                         "friendly_name": (row.get("friendly_name") or "").strip(),
                         "provider": (row.get("provider") or "IONOS").strip() or "IONOS",
                         "package": (row.get("package") or "").strip(),
