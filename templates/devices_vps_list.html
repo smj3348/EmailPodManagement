@@ -13,8 +13,9 @@
 
     <select name="provider" style="padding: 0.4rem 0.6rem; margin-left: 0.5rem;">
         <option value="">All providers</option>
-        <option value="IONOS" {% if provider == "IONOS" %}selected{% endif %}>IONOS</option>
-        <option value="OTHER" {% if provider == "OTHER" %}selected{% endif %}>Other</option>
+        {% for value,label in provider_choices %}
+            <option value="{{ value }}" {% if provider == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
     </select>
 
     <select name="active" style="padding: 0.4rem 0.6rem; margin-left: 0.5rem;">
@@ -56,7 +57,7 @@
                     {% endif %}
                 </p>
                 <p>
-                    <a href="{% url 'devices_vps_detail' slug=s.slug %}">View details →</a>
+                    <a href="{% url 'devices_vps_detail' slug=s.slug %}">View details</a>
                 </p>
             </section>
         {% endfor %}
