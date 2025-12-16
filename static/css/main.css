@@ -203,3 +203,53 @@ body {
     margin-bottom: 1rem;
 }
 
+/* ================================
+   Global Link Styling (Dashboard)
+   ================================ */
+
+/* Base link style */
+a {
+    color: #7aa2ff;                 /* soft but visible blue */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+
+/* Hover state */
+a:hover {
+    color: #9db7ff;
+    text-shadow: 0 0 6px rgba(122, 162, 255, 0.35);
+    text-decoration: underline;
+}
+
+/* Card-specific links (VPS cards, pod cards, etc.) */
+.dash-card a {
+    color: #8fb0ff;
+    font-weight: 600;
+}
+
+/* Call-to-action style links (like "View VPS servers →") */
+.dash-card a::after {
+    content: " →";
+}
+
+/* Detail page links (panel, webmail, back links) */
+.app-main a {
+    color: #7aa2ff;
+}
+
+/* Back navigation links */
+.app-main a[href^="/"] {
+    font-weight: 600;
+}
+
+/* Prevent links from blending into muted text */
+p a {
+    color: #7aa2ff;
+}
+
+/* Accessibility: visited links slightly muted but still visible */
+a:visited {
+    color: #6a8fe0;
+}
+
