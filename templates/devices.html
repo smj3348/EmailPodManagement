@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Devices | Outbound Operations{% endblock %}
+
+{% block content %}
+<h2>Devices</h2>
+
+<div class="dash-grid">
+    <section class="dash-card">
+        <h3>VPS Servers</h3>
+        <p>All individual VPS nodes (IONOS and others) with IPs, hostnames, and access details.</p>
+        <p><a href="{% url 'devices_vps_list' %}">View VPS servers →</a></p>
+    </section>
+
+    <section class="dash-card">
+        <h3>Main Engine Servers</h3>
+        <p>Core mail engines and control servers that power each pod.</p>
+        <p><em>(Coming soon)</em></p>
+    </section>
+
+    <section class="dash-card">
+        <h3>Device Groups</h3>
+        <p>Future: group devices by role, provider, warmup stage, etc.</p>
+        <p><em>(Coming soon)</em></p>
+    </section>
+</div>
+{% endblock %}
