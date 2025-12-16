@@ -7,7 +7,6 @@ class Pod(models.Model):
     Logical grouping of devices (VPS servers).
     Example: pod-us-1, pod-eu-1, warmup-pod, etc.
     """
-
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=120, unique=True, blank=True)
 
@@ -38,10 +37,10 @@ class VpsServer(models.Model):
 
     PROVIDER_CHOICES = [
         ("IONOS", "IONOS"),
+        ("CONTABO", "Contabo"),
         ("OTHER", "Other"),
     ]
 
-    # NEW: link device -> pod
     pod = models.ForeignKey(
         Pod,
         null=True,
