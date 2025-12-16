@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ server.code }} | Device | Outbound Operations{% endblock %}
+
+{% block content %}
+<h2>Device: {{ server.code }} — {{ server.friendly_name }}</h2>
+
+<div class="dash-grid">
+    <section class="dash-card">
+        <h3>General</h3>
+        <p>
+            {% if server.pod %}<strong>Pod:</strong> {{ server.pod.name }}<br>{% endif %}
+            <strong>Provider:</strong> {{ server.provider }}{% if server.package %} ({{ server.package }}){% endif %}<br>
+            {% if server.main_ip %}<strong>IP:</strong> {{ server.main_ip }}<br>{% endif %}
+            {% if server.hostname %}<strong>Hostname:</strong> {{ server.hostname }}<br>{% endif %}
+            {% if server.domain %}<strong>Domain:</strong> {{ server.domain }}<br>{% endif %}
+            <strong>Active:</strong> {{ server.is_active }}
+        </p>
+    </section>
+
+    <section class="dash-card">
+        <h3>Access</h3>
+        <p>
+            {% if server.panel_url %}
+                <strong>Panel:</strong> <a href="{{ server.panel_url }}" target="_blank" rel="noopener noreferrer">{{ server.panel_url }}</a><br>
+            {% endif %}
+            {% if server.panel_username %}
+                <strong>Panel user:</strong> {{ server.panel_username }}<br>
+            {% endif %}
+            {% if server.panel_password %}
+                <strong>Panel password:</strong> {{ server.panel_password }}<br>
+            {% endif %}
+
+            {% if server.webmail_url %}
+                <strong>Webmail:</strong> <a href="{{ server.webmail_url }}" target="_blank" rel="noopener noreferrer">{{ server.webmail_url }}</a><br>
+            {% endif %}
+
+            {% if server.ssh_host %}
+                <strong>SSH:</strong> {{ server.ssh_host }}<br>
+            {% endif %}
+            {% if server.ssh_user %}
+                <strong>SSH user:</strong> {{ server.ssh_user }}<br>
+            {% endif %}
+        </p>
+    </section>
+
+    <section class="dash-card">
+        <h3>Notes</h3>
+        <p>{{ server.notes|default:"No notes yet." }}</p>
+    </section>
+</div>
+
+<p style="margin-top: 1rem;">
+    <a href="{% url 'devices_vps_list' %}">← Back to Devices list</a>
+</p>
+{% endblock %}
